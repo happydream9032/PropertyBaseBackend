@@ -15,13 +15,13 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 
 RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env cat /etc/secrets/.env
 
-#RUN --mount=type=secret,id=_env,target=$PWD/.env
+RUN dotnet dev-certs https
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["PropertyBase.csproj", "./"]
 RUN dotnet restore "PropertyBase.csproj"
-RUN dotnet dev-certs https
+
 
 COPY . .
 WORKDIR "/src/."
