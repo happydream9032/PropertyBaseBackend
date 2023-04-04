@@ -29,6 +29,8 @@ RUN dotnet build "PropertyBase.csproj" -c Release -o /app/build
 FROM build AS publish
 #RUN dotnet publish "PropertyBase.csproj" -c Release -o /app/publish /p:UseAppHost=false
 RUN dotnet publish "PropertyBase.csproj" -c Release -o /app/publish
+RUN dotnet dev-certs https --clear
+RUN dotnet dev-certs https
 #RUN dotnet dev-certs https -ep ${HOME}/.aspnet/https/PropertyBase.pfx -p dummyPass
 #RUN dotnet user-secrets init
 #RUN dotnet user-secrets -p ./PropertyBase.csproj set "Kestrel:Certificates:Development:Password" "dummyPass"
@@ -36,5 +38,4 @@ RUN dotnet publish "PropertyBase.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN dotnet dev-certs https
 ENTRYPOINT ["dotnet", "PropertyBase.dll"]
