@@ -2,7 +2,6 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-RUN dotnet dev-certs https
 EXPOSE 80
 EXPOSE 443
 
@@ -28,6 +27,7 @@ WORKDIR "/src/."
 RUN dotnet build "PropertyBase.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "PropertyBase.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet dev-certs https
 
 FROM base AS final
 WORKDIR /app
