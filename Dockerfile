@@ -7,6 +7,7 @@ EXPOSE 443
 
 ENV ASPNETCORE_URLS=https://+:443;http://+:80
 ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_Kestrel__Certificates__Development__Password=dummyPass
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
@@ -27,7 +28,8 @@ WORKDIR "/src/."
 RUN dotnet build "PropertyBase.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "PropertyBase.csproj" -c Release -o /app/publish /p:UseAppHost=false
-RUN dotnet dev-certs https
+RUN dotnet dev-certs https -ep ${HOME}/.aspnet/https/PropertyBase.pfx -p dummyPass
+RUN dotnet user-secrets -p aspnetapp/aspnetapp.csproj set "Kestrel:Certificates:Development:Password" "dummyPass"
 
 FROM base AS final
 WORKDIR /app
