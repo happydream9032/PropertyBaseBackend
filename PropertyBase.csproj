@@ -28,6 +28,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
     <PackageReference Include="DotNetEnv" Version="2.5.0" />
+    <PackageReference Include="sib_api_v3_sdk" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +53,11 @@
     <None Remove="Exceptions\" />
     <None Remove="Data\Repositories\" />
     <None Remove="Routes\" />
+    <None Remove="SendGrid" />
+    <None Remove="SendGrid.SmtpApi" />
+    <None Remove="DTOs\Email\" />
+    <None Remove="Services\EmailTemplates\" />
+    <None Remove="sib_api_v3_sdk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -64,5 +70,7 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Data\Repositories\" />
     <Folder Include="Routes\" />
+    <Folder Include="DTOs\Email\" />
+    <Folder Include="Services\EmailTemplates\" />
   </ItemGroup>
 </Project>

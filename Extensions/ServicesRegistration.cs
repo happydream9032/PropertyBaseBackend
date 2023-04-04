@@ -34,7 +34,13 @@ namespace PropertyBase.Extensions
             
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-            builder.Services.AddIdentity<User, IdentityRole>()
+            builder.Services.AddIdentity<User, IdentityRole>(c =>
+            {
+                c.User.RequireUniqueEmail = true;
+                c.SignIn.RequireConfirmedEmail = true;
+                c.Password.RequiredLength = 8;
+                c.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            })
                   .AddEntityFrameworkStores<PropertyBaseDbContext>()
                   .AddDefaultTokenProviders();
 
@@ -82,9 +88,12 @@ namespace PropertyBase.Extensions
 
             builder.Services.AddAuthorization();
 
+            builder.Services.AddHttpClient();
+
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped<IAgencyRepository, AgencyRepository>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddTransient<IEmailService, EmailService>();
 
             return builder.Services;
         }

@@ -3,10 +3,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PropertyBase.Contracts;
 using PropertyBase.DTOs.Authentication;
+using PropertyBase.DTOs.Email;
 using PropertyBase.Entities;
 using PropertyBase.Exceptions;
 
@@ -19,12 +21,14 @@ namespace PropertyBase.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtSettings _jwtSettings;
         private readonly IAgencyRepository _agencyRepository;
+        private readonly IEmailService _emailService;
 
         public AuthenticationService(UserManager<User> userManager,
             SignInManager<User> signInManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<JwtSettings> jwtSettings,
-            IAgencyRepository agencyRepository
+            IAgencyRepository agencyRepository,
+            IEmailService emailService
             )
         {
             _userManager = userManager;
@@ -32,6 +36,7 @@ namespace PropertyBase.Services
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _agencyRepository = agencyRepository;
+            _emailService = emailService;
         }
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -40,10 +45,10 @@ namespace PropertyBase.Services
 
             if(user == null)
             {
-                throw new RequestException(StatusCodes.Status401Unauthorized, $"User with email {request.Email}");
+                throw new RequestException(StatusCodes.Status400BadRequest, $"User with email {request.Email} not found.");
             }
 
-            var signinResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password,false, lockoutOnFailure: false);
+            var signinResult = await _signInManager.PasswordSignInAsync(user.UserName!, request.Password,false, lockoutOnFailure: false);
             if (!signinResult.Succeeded)
             {
                 throw new RequestException(StatusCodes.Status400BadRequest, "Invalid Credentials");
@@ -54,7 +59,7 @@ namespace PropertyBase.Services
             return new AuthenticationResponse()
             {
                 Email = request.Email,
-                UserName = user.UserName,
+                UserName = user.UserName!,
                 Id = user.Id,
                 Roles = roles,
                 Token = new JwtSecurityTokenHandler().WriteToken(token)
@@ -110,7 +115,7 @@ namespace PropertyBase.Services
 
                     var role = await _roleManager.FindByNameAsync(roleName);
 
-                    if(role == null)
+                    if (role == null)
                     {
                         var createRole = await _roleManager.CreateAsync(new IdentityRole(roleName));
 
@@ -120,13 +125,13 @@ namespace PropertyBase.Services
                         }
                     }
 
-                    if(request.RoleType == RoleType.Agency)
+                    if (request.RoleType == RoleType.Agency)
                     {
                         var nameSet = String.IsNullOrEmpty(request.AgencyName) ? 0.00 : 1.00;
                         var citySet = String.IsNullOrEmpty(request.AgencyCity) ? 0.00 : 1.00;
                         var stateSet = String.IsNullOrEmpty(request.AgencyState) ? 0.00 : 1.00;
 
-                        var profileCompletionPercentage = Math.Round((nameSet + citySet + stateSet) / 3 * 100,2);
+                        var profileCompletionPercentage = Math.Round((nameSet + citySet + stateSet) / 3 * 100, 2);
                         var agency = new Agency
                         {
                             City = request.AgencyCity,
@@ -134,7 +139,7 @@ namespace PropertyBase.Services
                             AgencyName = request.AgencyName,
 
                             ProfileCompletionPercentage = profileCompletionPercentage,
-                                                            
+
                             CreatedByUserId = user.Id,
                             OwnerId = user.Id
                         };
@@ -147,6 +152,18 @@ namespace PropertyBase.Services
                     {
                         throw new RequestException(StatusCodes.Status400BadRequest, roleResult.Errors?.FirstOrDefault()?.Description);
                     }
+
+                    var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(emailConfirmationToken));
+                    var emailHtmlContent = _emailService.GenerateHtmlForEmailConfirmation(user, encodedToken);
+
+                    var sender = new EmailUser("Property Forager", Environment.GetEnvironmentVariable("SUPPORT_EMAIL")!);
+                    var recipient = new EmailUser($"{user.FirstName} {user.LastName}", user.Email);
+
+                    var emailRequest = new EmailRequest(sender, recipient, "Email Confirmation", emailHtmlContent);
+
+                    _emailService.sendMail(emailRequest);
+
 
                     return new RegistrationResponse() { Message = "Registration successful" };
 

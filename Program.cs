@@ -27,7 +27,6 @@ builder.Services.AddCors(option =>
 {
     option.AddPolicy("Public", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
@@ -66,7 +65,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Property Base API");
+    });
     app.UseDeveloperExceptionPage();
 }
 
@@ -77,9 +79,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseRouting();
 
-app.MapGroup("/accounts")
+app.MapGroup("/api/accounts")
     .UserApi()
     .WithOpenApi();
+
 
 app.Run();
 
