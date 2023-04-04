@@ -24,9 +24,6 @@ WORKDIR /src
 COPY ["PropertyBase.csproj", "./"]
 RUN dotnet restore "PropertyBase.csproj"
 
-RUN dotnet dev-certs https --clear
-RUN dotnet dev-certs https
-
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "PropertyBase.csproj" -c Release -o /app/build
