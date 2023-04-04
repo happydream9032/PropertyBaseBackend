@@ -22,7 +22,7 @@ namespace PropertyBase.Routes
             {
                 return Results.Ok(await authService.RegisterAsync(request));
             });
-            group.MapPost("/verifyEmail/{email}/{confirmationToken}", async (string email, string confirmationToken,HttpResponse response, [FromServices] UserManager<User> userManager) =>
+            group.MapGet("/verifyEmail/{email}/{confirmationToken}", async (string email, string confirmationToken,HttpResponse response, [FromServices] UserManager<User> userManager) =>
             {
                 var user = await userManager.FindByEmailAsync(email);
                 if (user == null)
