@@ -47,8 +47,8 @@ namespace PropertyBase.Services
             {
                 throw new RequestException(StatusCodes.Status400BadRequest, $"User with email {request.Email} not found.");
             }
-
-            var signinResult = await _signInManager.PasswordSignInAsync(user.UserName!, request.Password,false, lockoutOnFailure: false);
+            
+            var signinResult = await _signInManager.PasswordSignInAsync(user, request.Password,false, lockoutOnFailure: false);
             if (!signinResult.Succeeded)
             {
                 throw new RequestException(StatusCodes.Status400BadRequest, "Invalid Credentials");

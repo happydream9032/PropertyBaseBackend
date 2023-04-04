@@ -27,7 +27,7 @@ namespace PropertyBase.Extensions
             connStringBuilder.Username = DotNetEnv.Env.GetString("DB_USER");
             connStringBuilder.Password = DotNetEnv.Env.GetString("DB_PASSWORD");
             connStringBuilder.Database = DotNetEnv.Env.GetString("DB_NAME");
-            connStringBuilder.RootCertificate = File.ReadAllBytes("root.crt").ToString();
+            //connStringBuilder.RootCertificate = File.ReadAllBytes("root.crt").ToString();
 
             builder.Services.AddDbContext<PropertyBaseDbContext>(options =>
                       options.UseNpgsql(connStringBuilder.ConnectionString));
