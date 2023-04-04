@@ -35,5 +35,6 @@ RUN dotnet publish "PropertyBase.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+RUN dotnet dev-certs https
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "PropertyBase.dll"]
