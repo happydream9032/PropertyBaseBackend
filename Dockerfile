@@ -2,10 +2,12 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+#EXPOSE 80
+#EXPOSE 443
 
-ENV ASPNETCORE_URLS=https://+:443;http://+:80
+#ENV ASPNETCORE_URLS=https://+:443;http://+:80
+ENV ASPNETCORE_URLS=http://+:\$PORT
+ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_Kestrel__Certificates__Development__Password=dummyPass
 
