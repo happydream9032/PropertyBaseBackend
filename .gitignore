@@ -406,3 +406,4 @@ ASALocalRun/
 
 appsettings.Development.json
 .env
+.vscode
