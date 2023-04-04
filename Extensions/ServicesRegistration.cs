@@ -40,6 +40,9 @@ namespace PropertyBase.Extensions
                 c.SignIn.RequireConfirmedEmail = true;
                 c.Password.RequiredLength = 8;
                 c.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+                c.Lockout.MaxFailedAccessAttempts = 4;
+                c.Lockout.AllowedForNewUsers = true;
+                c.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             })
                   .AddEntityFrameworkStores<PropertyBaseDbContext>()
                   .AddDefaultTokenProviders();
