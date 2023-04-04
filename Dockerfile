@@ -2,6 +2,7 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+RUN dotnet dev-certs https
 EXPOSE 80
 EXPOSE 443
 
@@ -15,7 +16,6 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 
 RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env cat /etc/secrets/.env
 
-RUN dotnet dev-certs https
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
