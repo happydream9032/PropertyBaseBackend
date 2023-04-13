@@ -31,6 +31,12 @@ namespace PropertyBase.Services
             return EmailConfirmationTemplate.GenerateTemplate(user, frontendUrl, emailVerificationUrl);
         }
 
+        public string GenerateHtmlForPasswordReset(User user, string resetToken)
+        {
+            var frontendUrlPath = $"{Environment.GetEnvironmentVariable("FRONTEND_URL")}/passwordReset/${resetToken}";
+            return PasswordResetTemplate.GenerateTemplate(user, frontendUrlPath);
+        }
+
         public async void sendMail(EmailRequest emailRequest)
         {
             if (!Configuration.Default.ApiKey.ContainsKey("api-key"))

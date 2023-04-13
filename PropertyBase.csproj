@@ -58,6 +58,7 @@
     <None Remove="DTOs\Email\" />
     <None Remove="Services\EmailTemplates\" />
     <None Remove="sib_api_v3_sdk" />
+    <None Remove="DTOs\User\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -72,5 +73,6 @@
     <Folder Include="Routes\" />
     <Folder Include="DTOs\Email\" />
     <Folder Include="Services\EmailTemplates\" />
+    <Folder Include="DTOs\User\" />
   </ItemGroup>
 </Project>

@@ -38,11 +38,11 @@ namespace PropertyBase.Services
             _agencyRepository = agencyRepository;
             _emailService = emailService;
         }
-
+        
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
-
+            
             if (user == null)
             {
                 throw new RequestException(StatusCodes.Status400BadRequest, $"User with email {request.Email} not found.");
@@ -204,7 +204,7 @@ namespace PropertyBase.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uuid",user.Id)
+                new Claim("uid",user.Id)
             }
             .Union(userClaims)
             .Union(roleClaims);

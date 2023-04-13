@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using PropertyBase.Contracts;
 using PropertyBase.DTOs.Authentication;
+using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
 using PropertyBase.Exceptions;
 
@@ -38,6 +39,22 @@ namespace PropertyBase.Routes
                 response.Redirect($"{Environment.GetEnvironmentVariable("FRONTEND_URL")!}/login");
                 
             });
+
+            group.MapPost("/forgetPassword/{email}", async (string email, [FromServices] IUserRepository userRepository) =>
+            {
+                return Results.Ok(await userRepository.ForgetPassword(email));
+            });
+
+            group.MapPost("/resetPassword", async ([FromBody] PasswordResetRequest request, [FromServices] IUserRepository userRepository) =>
+            {
+                return Results.Ok(await userRepository.ResetPassword(request));
+            });
+
+            group.MapPost("/changePassword", async ([FromBody] PasswordUpdateRequest request, [FromServices] IUserRepository userRepository) =>
+            {
+                return Results.Ok(await userRepository.UpdatePassword(request));
+            }).RequireAuthorization();
+
             return group;
         }
     }
