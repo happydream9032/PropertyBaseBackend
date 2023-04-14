@@ -68,7 +68,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Property Base API");
-        //c.RoutePrefix = string.Empty;
+        c.RoutePrefix = string.Empty;
     });
     app.UseDeveloperExceptionPage();
 }
@@ -77,8 +77,8 @@ app.UseHttpsRedirection();
 app.UseCors("Public");
 app.UseMiddleware<RequestStatusCodeHandler>();
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseRouting();
+app.UseAuthorization();
 
 app.MapGroup("/api/accounts")
     .UserApi()
