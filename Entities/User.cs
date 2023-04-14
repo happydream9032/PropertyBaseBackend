@@ -33,6 +33,8 @@ namespace PropertyBase.Entities
 
         public string? AvatarUrl { get; set; }
 
+        public string? ImageFileId { get; set; }
+
         public double ProfileCompletionPercentage { get; set; }
     }
 }

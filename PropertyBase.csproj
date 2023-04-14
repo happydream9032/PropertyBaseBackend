@@ -29,6 +29,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
     <PackageReference Include="DotNetEnv" Version="2.5.0" />
     <PackageReference Include="sib_api_v3_sdk" Version="4.0.2" />
+    <PackageReference Include="Imagekit" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +60,7 @@
     <None Remove="Services\EmailTemplates\" />
     <None Remove="sib_api_v3_sdk" />
     <None Remove="DTOs\User\" />
+    <None Remove="Imagekit" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />

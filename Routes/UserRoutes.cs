@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -19,10 +20,14 @@ namespace PropertyBase.Routes
             {
                 return Results.Ok(await authService.AuthenticateAsync(request));
             });
+
+
             group.MapPost("/register", async ([FromBody] RegistrationRequest request, [FromServices] IAuthenticationService authService) =>
             {
                 return Results.Ok(await authService.RegisterAsync(request));
             });
+
+
             group.MapGet("/verifyEmail/{email}/{confirmationToken}", async (string email, string confirmationToken,HttpResponse response, [FromServices] UserManager<User> userManager) =>
             {
                 var user = await userManager.FindByEmailAsync(email);
@@ -40,19 +45,115 @@ namespace PropertyBase.Routes
                 
             });
 
+
             group.MapPost("/forgetPassword/{email}", async (string email, [FromServices] IUserRepository userRepository) =>
             {
                 return Results.Ok(await userRepository.ForgetPassword(email));
             });
+
 
             group.MapPost("/resetPassword", async ([FromBody] PasswordResetRequest request, [FromServices] IUserRepository userRepository) =>
             {
                 return Results.Ok(await userRepository.ResetPassword(request));
             });
 
+
             group.MapPost("/changePassword", async ([FromBody] PasswordUpdateRequest request, [FromServices] IUserRepository userRepository) =>
             {
                 return Results.Ok(await userRepository.UpdatePassword(request));
+            }).RequireAuthorization();
+
+
+            group.MapPut("/updateProfile", async ([FromBody] UserProfileUpdateRequest request,
+                [FromServices] IUserRepository userRepository,
+                IHttpContextAccessor contextAccessor
+                ) =>
+            {
+                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var user = await userRepository
+                            .GetQueryable()
+                            .Where(c => c.Id == userId)
+                            .FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    throw new RequestException(StatusCodes.Status400BadRequest, $"User with id {userId} not found");
+                }
+
+                if (request.Gender.HasValue)
+                {
+                    var gender = request.Gender == Gender.Female ? "Female" :
+                       request.Gender == Gender.Male ? "Male" :
+                       "Others";
+                    user.Gender = gender;
+                }
+
+                if (request.EmploymentStatus.HasValue)
+                {
+                    var employmentStatus = request.EmploymentStatus == EmploymentStatus.Employed ? "Employed" :
+                         request.EmploymentStatus == EmploymentStatus.SelfEmployed ? "SelfEmployed" :
+                         request.EmploymentStatus == EmploymentStatus.Student ? "Student" :
+                         "UnEmployed";
+                    user.EmploymentStatus = employmentStatus;
+                }
+                if (!String.IsNullOrEmpty(request.FirstName)) user.FirstName = request.FirstName;
+                if (!String.IsNullOrEmpty(request.LastName)) user.LastName = request.LastName;
+                if (!String.IsNullOrEmpty(request.Email)) user.Email = request.Email;
+                if (!String.IsNullOrEmpty(request.PhoneNumber)) user.PhoneNumber = request.PhoneNumber;
+                if (!String.IsNullOrEmpty(request.City)) user.City = request.City;
+                if (!String.IsNullOrEmpty(request.State)) user.State = request.State;
+
+                await userRepository.UpdateAsync(user);
+
+                return Results.Ok(user);
+
+            }).RequireAuthorization();
+
+            group.MapPut("/updateProfilePhoto", async (IFormFile file,
+                [FromServices] IUserRepository userRepository,
+                [FromServices] IFileStorageService fileStorageService,
+                IHttpContextAccessor contextAccessor
+                ) =>
+            {
+                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var user = await userRepository
+                            .GetQueryable()
+                            .Where(c => c.Id == userId)
+                            .FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    throw new RequestException(StatusCodes.Status400BadRequest, $"User with id {userId} not found");
+                }
+
+                if (!String.IsNullOrEmpty(user.ImageFileId))
+                {
+                    await fileStorageService.DeleteFile(user.ImageFileId);
+                }
+
+                var uploadedFile = await fileStorageService.Upload(file);
+                user.ImageFileId = uploadedFile.fileId;
+                user.AvatarUrl = uploadedFile.url;
+                await userRepository.UpdateAsync(user);
+                return Results.Ok(uploadedFile);
+
+            }).RequireAuthorization();
+
+            group.MapGet("/profile", async ([FromServices] IUserRepository userRepository, IHttpContextAccessor contextAccessor) =>
+            {
+                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var user = await userRepository
+                            .GetQueryable()
+                            .Where(c => c.Id == userId)
+                            .FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    throw new RequestException(StatusCodes.Status400BadRequest, $"User with id {userId} not found");
+                }
+
+                return Results.Ok(user);
+
             }).RequireAuthorization();
 
             return group;

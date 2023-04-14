@@ -77,8 +77,8 @@ app.UseHttpsRedirection();
 app.UseCors("Public");
 app.UseMiddleware<RequestStatusCodeHandler>();
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseRouting();
+app.UseAuthorization();
 
 app.MapGroup("/api/accounts")
     .UserApi()

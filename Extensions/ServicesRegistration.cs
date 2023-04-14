@@ -97,6 +97,7 @@ namespace PropertyBase.Extensions
             builder.Services.AddScoped<IAgencyRepository, AgencyRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddTransient<IFileStorageService, FileStorageService>();
             builder.Services.AddTransient<IEmailService, EmailService>();
 
             return builder.Services;
