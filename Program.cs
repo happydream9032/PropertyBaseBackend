@@ -80,6 +80,12 @@ app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
 
+// PING API
+app.MapGet("/ping", () =>
+{
+    return Results.Ok(new { Message = "PONG!" });
+});
+
 app.MapGroup("/api/accounts")
     .UserApi()
     .WithOpenApi();
