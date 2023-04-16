@@ -81,7 +81,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 // PING API
-app.MapGet("/ping", () =>
+app.MapGet("/api/ping", () =>
 {
     return Results.Ok(new { Message = "PONG!" });
 });
