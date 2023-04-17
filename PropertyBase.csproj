@@ -30,6 +30,7 @@
     <PackageReference Include="DotNetEnv" Version="2.5.0" />
     <PackageReference Include="sib_api_v3_sdk" Version="4.0.2" />
     <PackageReference Include="Imagekit" Version="4.0.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,6 +63,9 @@
     <None Remove="DTOs\User\" />
     <None Remove="Imagekit" />
     <None Remove="DTOs\Agency\" />
+    <None Remove="FluentValidation.AspNetCore" />
+    <None Remove="DTOs\Property\" />
+    <None Remove="DTOs\Property\AddProperty\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -78,5 +82,7 @@
     <Folder Include="Services\EmailTemplates\" />
     <Folder Include="DTOs\User\" />
     <Folder Include="DTOs\Agency\" />
+    <Folder Include="DTOs\Property\" />
+    <Folder Include="DTOs\Property\AddProperty\" />
   </ItemGroup>
 </Project>
