@@ -147,7 +147,7 @@ namespace PropertyBase.Services
                 var citySet = String.IsNullOrEmpty(request.AgencyCity) ? 0.00 : 1.00;
                 var stateSet = String.IsNullOrEmpty(request.AgencyState) ? 0.00 : 1.00;
 
-                var profileCompletionPercentage = Math.Round((nameSet + citySet + stateSet) / 3 * 100, 2);
+                var profileCompletionPercentage = Math.Round((nameSet + citySet + stateSet) / 4 * 100, 2);
                 var agency = new Agency
                 {
                     City = request.AgencyCity,

@@ -131,7 +131,7 @@ namespace PropertyBase.Routes
                     await fileStorageService.DeleteFile(user.ImageFileId);
                 }
 
-                var uploadedFile = await fileStorageService.Upload(file);
+                var uploadedFile = await fileStorageService.Upload(file,ImageStorageFolder.Profile);
                 user.ImageFileId = uploadedFile.fileId;
                 user.AvatarUrl = uploadedFile.url;
                 await userRepository.UpdateAsync(user);

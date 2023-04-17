@@ -47,6 +47,16 @@ namespace PropertyBase.Extensions
                   .AddEntityFrameworkStores<PropertyBaseDbContext>()
                   .AddDefaultTokenProviders();
 
+            builder.Services.AddAuthorizationBuilder()
+                            .AddPolicy(AuthorizationPolicy.AgencyPolicy, policy =>
+                                    policy.RequireRole(Role.Agency))
+                            .AddPolicy(AuthorizationPolicy.AdminPolicy, policy =>
+                                policy.RequireRole(Role.Admin))
+                            .AddPolicy(AuthorizationPolicy.PropertyOwnerPolicy, policy =>
+                                policy.RequireRole(Role.PropertyOwner))
+                            .AddPolicy(AuthorizationPolicy.TenantPolicy, policy =>
+                                policy.RequireRole(Role.Tenant));
+
             builder.Services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
