@@ -88,8 +88,14 @@ app.MapGet("/api/ping", () =>
 
 app.MapGroup("/api/accounts")
     .UserApi()
+    .WithTags("Account")
     .WithOpenApi();
 
+app.MapGroup("/api/agency")
+    .AgencyApi()
+    .WithTags("Agency")
+    .WithOpenApi()
+    .RequireAuthorization(AuthorizationPolicy.AgencyPolicy);
 
 app.Run();
 

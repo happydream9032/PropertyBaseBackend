@@ -4,6 +4,7 @@ using Imagekit.Models;
 using Imagekit.Sdk;
 using PropertyBase.Contracts;
 using PropertyBase.DTOs;
+using PropertyBase.Entities;
 
 namespace PropertyBase.Services
 {
@@ -11,13 +12,11 @@ namespace PropertyBase.Services
     {
 
         private readonly ImagekitClient _imagekitClient;
-        private readonly string _folderNaame;
 
         public FileStorageService()
         {
             _imagekitClient = new ImagekitClient(DotNetEnv.Env.GetString("IMAGEKIT_PUBLIC_KEY"),
                 DotNetEnv.Env.GetString("IMAGEKIT_PRIVATE_KEY"), DotNetEnv.Env.GetString("IMAGEKIT_URL_ENDPOINT"));
-            _folderNaame = "Profile";
             
         }
 
@@ -26,7 +25,7 @@ namespace PropertyBase.Services
             return await _imagekitClient.DeleteFileAsync(fileId);
         }
 
-        public async Task<Result> Upload(IFormFile file)
+        public async Task<Result> Upload(IFormFile file, ImageStorageFolder folderName)
         {
             string base64String = "";
           using(var ms = new MemoryStream())
@@ -41,9 +40,9 @@ namespace PropertyBase.Services
             {
                 file = base64String,
                 fileName = Guid.NewGuid().ToString(),
-                folder = _folderNaame,
+                folder = folderName == ImageStorageFolder.Profile? "Profile":"Property",
             };
-
+            
             var uploadedFile = await _imagekitClient.UploadAsync(obj);
             return uploadedFile;
         }

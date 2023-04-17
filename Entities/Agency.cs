@@ -8,6 +8,7 @@ namespace PropertyBase.Entities
         public List<Property> Properties { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
+        public string? Street { get; set; }
         public string OwnerId { get; set; }
         public User Owner { get; set; }
         public double ProfileCompletionPercentage { get; set; }
