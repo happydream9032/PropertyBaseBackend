@@ -7,6 +7,7 @@ namespace PropertyBase.Entities
         public const string AgencyPolicy = "AgencyPolicy";
         public const string PropertyOwnerPolicy = "PropertyOwnerPolicy";
         public const string TenantPolicy = "TenantPolicy";
+        public const string PropertyPolicy = "PropertyPolicy";
     }
 }
 

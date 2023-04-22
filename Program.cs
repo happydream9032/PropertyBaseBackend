@@ -68,7 +68,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Property Base API");
-        //c.RoutePrefix = string.Empty;
+        c.RoutePrefix = string.Empty;
     });
     app.UseDeveloperExceptionPage();
 }
@@ -96,6 +96,11 @@ app.MapGroup("/api/agencies")
     .WithTags("Agency")
     .WithOpenApi()
     .RequireAuthorization(AuthorizationPolicy.AgencyPolicy);
+
+app.MapGroup("/api/properties")
+    .PropertyApi()
+    .WithTags("Property")
+    .WithOpenApi();
 
 app.Run();
 

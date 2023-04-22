@@ -31,6 +31,7 @@
     <PackageReference Include="sib_api_v3_sdk" Version="4.0.2" />
     <PackageReference Include="Imagekit" Version="4.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,6 +67,9 @@
     <None Remove="FluentValidation.AspNetCore" />
     <None Remove="DTOs\Property\" />
     <None Remove="DTOs\Property\AddProperty\" />
+    <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <None Remove="Profiles\" />
+    <None Remove="DTOs\Property\SaveDraft\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -84,5 +88,7 @@
     <Folder Include="DTOs\Agency\" />
     <Folder Include="DTOs\Property\" />
     <Folder Include="DTOs\Property\AddProperty\" />
+    <Folder Include="Profiles\" />
+    <Folder Include="DTOs\Property\SaveDraft\" />
   </ItemGroup>
 </Project>
