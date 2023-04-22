@@ -91,11 +91,16 @@ app.MapGroup("/api/accounts")
     .WithTags("Account")
     .WithOpenApi();
 
-app.MapGroup("/api/agency")
+app.MapGroup("/api/agencies")
     .AgencyApi()
     .WithTags("Agency")
     .WithOpenApi()
     .RequireAuthorization(AuthorizationPolicy.AgencyPolicy);
+
+app.MapGroup("/api/properties")
+    .PropertyApi()
+    .WithTags("Property")
+    .WithOpenApi();
 
 app.Run();
 

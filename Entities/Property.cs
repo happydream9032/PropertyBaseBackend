@@ -10,7 +10,7 @@ namespace PropertyBase.Entities
         public string Street { get; set; }
         public PropertyStatus Status { get; set; }
         public PropertyAvailability Availability { get; set; }
-        public PropertyType Type { get; set; }
+        public PropertyType PropertyType { get; set; }
         public double Price { get; set; }
         public PropertyPriceType PriceType { get; set; }
         public int NumberOfBedrooms { get; set; }
@@ -22,6 +22,7 @@ namespace PropertyBase.Entities
         public bool? Serviced { get; set; }
         public bool? Shared { get; set; }
         public List<PropertyImage> Images { get; set; }
+        public DateTime PublishedDate { get; set; }
         public Guid? AgencyId { get; set; }
         public Agency? Agency { get; set; }
     }

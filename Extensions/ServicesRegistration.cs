@@ -12,7 +12,7 @@ using Npgsql;
 using PropertyBase.Contracts;
 using PropertyBase.Data.Repositories;
 using PropertyBase.Services;
-
+using System.Reflection;
 
 namespace PropertyBase.Extensions
 {
@@ -31,6 +31,10 @@ namespace PropertyBase.Extensions
 
             builder.Services.AddDbContext<PropertyBaseDbContext>(options =>
                       options.UseNpgsql(connStringBuilder.ConnectionString));
+
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            builder.Services.AddMemoryCache();
             
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
@@ -55,7 +59,10 @@ namespace PropertyBase.Extensions
                             .AddPolicy(AuthorizationPolicy.PropertyOwnerPolicy, policy =>
                                 policy.RequireRole(Role.PropertyOwner))
                             .AddPolicy(AuthorizationPolicy.TenantPolicy, policy =>
-                                policy.RequireRole(Role.Tenant));
+                                policy.RequireRole(Role.Tenant))
+                            .AddPolicy(AuthorizationPolicy.PropertyPolicy, policy =>
+                                policy.RequireRole(Role.Agency,Role.PropertyOwner,Role.Admin)
+                              );
 
             builder.Services.AddAuthentication(option =>
             {

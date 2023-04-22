@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PropertyBase.Data;
@@ -11,9 +12,11 @@ using PropertyBase.Data;
 namespace PropertyBase.Migrations
 {
     [DbContext(typeof(PropertyBaseDbContext))]
-    partial class PropertyBaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230422160339_UpdatedPropertyEntity")]
+    partial class UpdatedPropertyEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
