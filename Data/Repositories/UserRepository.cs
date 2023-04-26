@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using PropertyBase.Contracts;
 using PropertyBase.DTOs;
 using PropertyBase.DTOs.Email;
+using PropertyBase.DTOs.Property.AddProperty;
 using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
 using PropertyBase.Exceptions;
@@ -90,12 +91,31 @@ namespace PropertyBase.Data.Repositories
             {
                 throw new RequestException(StatusCodes.Status400BadRequest, result.Errors?.FirstOrDefault()?.Description);
             }
-
+            
             return new BaseResponse
             {
                 Message = "Password has been changed successfully",
                 Success = true
             };
+        }
+
+        public async Task<bool> UserHasRole(User user, RoleType roleType)
+        {
+            var roleName = "";
+            switch (roleType)
+            {
+                case RoleType.Agency:
+                    roleName = Role.Agency;
+                    break;
+                case RoleType.PropertyOwner:
+                    roleName = Role.PropertyOwner;
+                    break;
+                default:
+                    roleName = Role.Tenant;
+                    break;
+            }
+            var role = await _roleManager.FindByNameAsync(roleName);
+            return await _userManger.IsInRoleAsync(user,role?.Name!);
         }
     }
 }

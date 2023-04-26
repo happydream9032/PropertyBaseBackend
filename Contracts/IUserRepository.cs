@@ -10,6 +10,7 @@ namespace PropertyBase.Contracts
         Task<BaseResponse> ForgetPassword(string email);
         Task<BaseResponse> ResetPassword(PasswordResetRequest request);
         Task<BaseResponse> UpdatePassword(PasswordUpdateRequest request);
+        Task<bool> UserHasRole(User user, RoleType roleType);
     }
 }
 

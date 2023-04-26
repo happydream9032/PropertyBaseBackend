@@ -20,7 +20,6 @@ namespace PropertyBase.DTOs.Property.SaveDraft
         public bool? Furnished { get; set; }
         public bool? Serviced { get; set; }
         public bool? Shared { get; set; }
-        public IFormFileCollection? files { get; set; }
     }
 }
 
