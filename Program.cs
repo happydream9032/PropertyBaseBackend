@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -58,6 +60,11 @@ builder.Services.AddSwaggerGen(option =>
 
 
 builder.RegisterServices();
+
+builder.Services.Configure<JsonOptions>(option =>
+{
+    option.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var app = builder.Build();
 

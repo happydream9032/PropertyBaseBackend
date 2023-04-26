@@ -9,6 +9,7 @@ using PropertyBase.DTOs.Authentication;
 using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
 using PropertyBase.Exceptions;
+using AutoMapper;
 
 namespace PropertyBase.Routes
 {
@@ -16,19 +17,30 @@ namespace PropertyBase.Routes
     {
         public static RouteGroupBuilder UserApi(this RouteGroupBuilder group)
         {
-            group.MapPost("/authenticate", async([FromBody] AuthenticationRequest request,[FromServices] IAuthenticationService authService) =>
+            group.MapPost("/authenticate", async(
+                [FromBody] AuthenticationRequest request,
+                [FromServices] IAuthenticationService authService
+                ) =>
             {
                 return Results.Ok(await authService.AuthenticateAsync(request));
             });
 
 
-            group.MapPost("/register", async ([FromBody] RegistrationRequest request, [FromServices] IAuthenticationService authService) =>
+            group.MapPost("/register", async (
+                [FromBody] RegistrationRequest request,
+                [FromServices] IAuthenticationService authService
+                ) =>
             {
                 return Results.Ok(await authService.RegisterAsync(request));
             });
 
 
-            group.MapGet("/verifyEmail/{email}/{confirmationToken}", async (string email, string confirmationToken,HttpResponse response, [FromServices] UserManager<User> userManager) =>
+            group.MapGet("/verifyEmail/{email}/{confirmationToken}", async (
+                string email,
+                string confirmationToken,
+                HttpResponse response,
+                [FromServices] UserManager<User> userManager
+                ) =>
             {
                 var user = await userManager.FindByEmailAsync(email);
                 if (user == null)
@@ -46,30 +58,39 @@ namespace PropertyBase.Routes
             });
 
 
-            group.MapPost("/forgetPassword/{email}", async (string email, [FromServices] IUserRepository userRepository) =>
+            group.MapPost("/forgetPassword/{email}", async (
+                string email,
+                [FromServices] IUserRepository userRepository) =>
             {
                 return Results.Ok(await userRepository.ForgetPassword(email));
             });
 
 
-            group.MapPost("/resetPassword", async ([FromBody] PasswordResetRequest request, [FromServices] IUserRepository userRepository) =>
+            group.MapPost("/resetPassword", async (
+                [FromBody] PasswordResetRequest request,
+                [FromServices] IUserRepository userRepository
+                ) =>
             {
                 return Results.Ok(await userRepository.ResetPassword(request));
             });
 
 
-            group.MapPost("/changePassword", async ([FromBody] PasswordUpdateRequest request, [FromServices] IUserRepository userRepository) =>
+            group.MapPost("/changePassword", async (
+                [FromBody] PasswordUpdateRequest request,
+                [FromServices] IUserRepository userRepository
+                ) =>
             {
                 return Results.Ok(await userRepository.UpdatePassword(request));
             }).RequireAuthorization();
 
 
-            group.MapPut("/updateProfile", async ([FromBody] UserProfileUpdateRequest request,
+            group.MapPut("/updateProfile", async (
+                [FromBody] UserProfileUpdateRequest request,
                 [FromServices] IUserRepository userRepository,
-                IHttpContextAccessor contextAccessor
+                [FromServices] ILoggedInUserService loggedInUserService
                 ) =>
             {
-                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var userId = loggedInUserService.UserId;
                 var user = await userRepository
                             .GetQueryable()
                             .Where(c => c.Id == userId)
@@ -112,10 +133,10 @@ namespace PropertyBase.Routes
             group.MapPut("/updateProfilePhoto", async (IFormFile file,
                 [FromServices] IUserRepository userRepository,
                 [FromServices] IFileStorageService fileStorageService,
-                IHttpContextAccessor contextAccessor
+                [FromServices] ILoggedInUserService loggedInUserService
                 ) =>
             {
-                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var userId = loggedInUserService.UserId;
                 var user = await userRepository
                             .GetQueryable()
                             .Where(c => c.Id == userId)
@@ -139,12 +160,17 @@ namespace PropertyBase.Routes
 
             }).RequireAuthorization();
 
-            group.MapGet("/profile", async ([FromServices] IUserRepository userRepository, IHttpContextAccessor contextAccessor) =>
+            group.MapGet("/profile", async (
+                [FromServices] IUserRepository userRepository,
+                [FromServices] ILoggedInUserService loggedInUserService,
+                IMapper mapper
+                ) =>
             {
-                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var userId = loggedInUserService.UserId;
                 var user = await userRepository
                             .GetQueryable()
                             .Where(c => c.Id == userId)
+                            .Select(c=>mapper.Map(c,new UserProfileVM()))
                             .FirstOrDefaultAsync();
 
                 if (user == null)

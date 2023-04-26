@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PropertyBase.Contracts;
+using PropertyBase.Data;
 using PropertyBase.DTOs.Authentication;
 using PropertyBase.DTOs.Email;
 using PropertyBase.Entities;
@@ -22,6 +23,7 @@ namespace PropertyBase.Services
         private readonly JwtSettings _jwtSettings;
         private readonly IAgencyRepository _agencyRepository;
         private readonly IEmailService _emailService;
+        
 
         public AuthenticationService(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -29,6 +31,7 @@ namespace PropertyBase.Services
             IOptions<JwtSettings> jwtSettings,
             IAgencyRepository agencyRepository,
             IEmailService emailService
+           
             )
         {
             _userManager = userManager;
@@ -37,6 +40,7 @@ namespace PropertyBase.Services
             _jwtSettings = jwtSettings.Value;
             _agencyRepository = agencyRepository;
             _emailService = emailService;
+           
         }
         
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -83,7 +87,7 @@ namespace PropertyBase.Services
             {
                 throw new RequestException(StatusCodes.Status400BadRequest, $"Email {request.Email} already exists.");
             }
-
+            
             var user = new User
             {
                 Email = request.Email,
@@ -102,12 +106,13 @@ namespace PropertyBase.Services
                 user.AllowRentDueNotifications = true;
                 user.ProfileCompletionPercentage = 50.00;
             }
-
+            
             if (request.RoleType == RoleType.Agency || request.RoleType == RoleType.PropertyOwner)
             {
                 user.AllowRentPaymentNotifications = true;
                 user.ProfileCompletionPercentage = 50.00;
             }
+            
             var register = await _userManager.CreateAsync(user, request.Password);
 
             if (!register.Succeeded)
@@ -137,7 +142,9 @@ namespace PropertyBase.Services
 
                 if (!createRole.Succeeded)
                 {
+                    await _userManager.DeleteAsync(user);
                     throw new RequestException(StatusCodes.Status400BadRequest, "Failed to create account type");
+                    
                 }
             }
 
@@ -167,6 +174,7 @@ namespace PropertyBase.Services
 
             if (!roleResult.Succeeded)
             {
+                await _userManager.DeleteAsync(user);
                 throw new RequestException(StatusCodes.Status400BadRequest, roleResult.Errors?.FirstOrDefault()?.Description);
             }
 

@@ -42,9 +42,6 @@ namespace PropertyBase.DTOs.Property.AddProperty
             RuleFor(c => c.PropertyType)
                 .NotNull()
                 .WithMessage("{PropertyName} is required.");
-
-            RuleForEach(c => c.files).Must(c => c.Length <= 10485760)
-                .WithMessage("Each file's size must not exceed 10MB");
         }
     }
 

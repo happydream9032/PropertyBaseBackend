@@ -13,6 +13,8 @@ using PropertyBase.Contracts;
 using PropertyBase.Data.Repositories;
 using PropertyBase.Services;
 using System.Reflection;
+using FluentValidation;
+using PropertyBase.DTOs.Property.AddProperty;
 
 namespace PropertyBase.Extensions
 {
@@ -113,9 +115,12 @@ namespace PropertyBase.Extensions
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped<IAgencyRepository, AgencyRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
             builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<ILoggedInUserService, LoggedInUserService>();
             builder.Services.AddTransient<IFileStorageService, FileStorageService>();
             builder.Services.AddTransient<IEmailService, EmailService>();
+            builder.Services.AddScoped<IValidator<Request>,Validator>();
 
             return builder.Services;
         }

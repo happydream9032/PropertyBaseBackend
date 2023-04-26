@@ -8,6 +8,7 @@ namespace PropertyBase.Contracts
     {
         Task<Result> Upload(IFormFile file, ImageStorageFolder folderName);
         Task<ResultDelete> DeleteFile(string fileId);
+        bool ValidateFileSize(IFormFile file);
     }
 }
 

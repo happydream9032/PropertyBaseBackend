@@ -13,10 +13,10 @@ namespace PropertyBase.Routes
         {
             group.MapPut("/update", async ([FromBody] UpdateAgencyRequest request,
                 [FromServices] IAgencyRepository agencyRepository,
-                 IHttpContextAccessor contextAccessor
+                 [FromServices] ILoggedInUserService loggedInUserService
                 ) =>
             {
-                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var userId = loggedInUserService.UserId;
                 var agency = await agencyRepository.GetQueryable()
                                   .Where(c => c.Id == request.AgencyId && c.OwnerId == userId)
                                   .FirstOrDefaultAsync();
@@ -45,11 +45,14 @@ namespace PropertyBase.Routes
                 });
             });
 
-            group.MapGet("/", async ([FromServices] IAgencyRepository agencyRepository,
-                 IHttpContextAccessor contextAccessor) =>
+            group.MapGet("/", async (
+                [FromServices] IAgencyRepository agencyRepository,
+                 [FromServices] ILoggedInUserService loggedInUserService
+                 ) =>
             {
-                var userId = contextAccessor.HttpContext?.User?.FindFirst("uid")?.Value;
+                var userId = loggedInUserService.UserId;
                 var agency = await agencyRepository.GetQueryable()
+                                             .Include(c=>c.Owner)
                                              .Where(c => c.OwnerId == userId)
                                              .FirstOrDefaultAsync();
                 return Results.Ok(agency);

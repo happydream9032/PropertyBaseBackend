@@ -5,6 +5,7 @@ using Imagekit.Sdk;
 using PropertyBase.Contracts;
 using PropertyBase.DTOs;
 using PropertyBase.Entities;
+using PropertyBase.Exceptions;
 
 namespace PropertyBase.Services
 {
@@ -45,6 +46,16 @@ namespace PropertyBase.Services
             
             var uploadedFile = await _imagekitClient.UploadAsync(obj);
             return uploadedFile;
+        }
+
+        public bool ValidateFileSize(IFormFile file)
+        {
+            if(file.Length > 10485760)
+            {
+                return false;
+            }
+
+            return true;
         }
 
        

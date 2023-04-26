@@ -23,6 +23,8 @@ namespace PropertyBase.Entities
         public bool? Shared { get; set; }
         public List<PropertyImage> Images { get; set; }
         public DateTime PublishedDate { get; set; }
+        public string? OwnerId { get; set; }
+        public User? Owner { get; set; }
         public Guid? AgencyId { get; set; }
         public Agency? Agency { get; set; }
     }
