@@ -1,10 +1,11 @@
 ﻿using System;
 using AutoMapper;
 using PropertyBase.DTOs.Property;
-using PropertyBase.DTOs.Property.AddProperty;
-using PropertyBase.DTOs.Property.SaveDraft;
 using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
+using PropertyBase.Features.Properties.AddProperty;
+using PropertyBase.Features.Properties.GetPropertyDetails;
+using PropertyBase.Features.Properties.SaveDraft;
 
 namespace PropertyBase.Profiles
 {
@@ -12,12 +13,16 @@ namespace PropertyBase.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<Request, Property>().ReverseMap();
-            CreateMap<DraftRequest, Property>().ReverseMap();
+            CreateMap<AddPropertyRequest, Property>().ReverseMap();
+            CreateMap<SaveDraftRequest, Property>().ReverseMap();
             CreateMap<User, UserProfileVM>();
             CreateMap<PropertyImage, PropertyImageVM>();
             CreateMap<Property, PropertyOverviewVM>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images));
+            CreateMap<Property, GetPropertyDetailsResponse>()
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images))
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner))
+                .ForMember(dest => dest.Agency, opt => opt.MapFrom(src => src.Agency));
                 
         }
     }
