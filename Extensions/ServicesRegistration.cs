@@ -14,7 +14,7 @@ using PropertyBase.Data.Repositories;
 using PropertyBase.Services;
 using System.Reflection;
 using FluentValidation;
-using PropertyBase.DTOs.Property.AddProperty;
+using MediatR;
 
 namespace PropertyBase.Extensions
 {
@@ -34,6 +34,7 @@ namespace PropertyBase.Extensions
             builder.Services.AddDbContext<PropertyBaseDbContext>(options =>
                       options.UseNpgsql(connStringBuilder.ConnectionString));
 
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             builder.Services.AddMemoryCache();
@@ -120,7 +121,7 @@ namespace PropertyBase.Extensions
             builder.Services.AddScoped<ILoggedInUserService, LoggedInUserService>();
             builder.Services.AddTransient<IFileStorageService, FileStorageService>();
             builder.Services.AddTransient<IEmailService, EmailService>();
-            builder.Services.AddScoped<IValidator<Request>,Validator>();
+            
 
             return builder.Services;
         }

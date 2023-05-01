@@ -1,11 +1,11 @@
 ﻿using System;
 using FluentValidation;
 
-namespace PropertyBase.DTOs.Property.AddProperty
+namespace PropertyBase.Features.Properties.AddProperty
 {
-    public class Validator : AbstractValidator<Request>
+    public class AddPropertyValidator : AbstractValidator<AddPropertyRequest>
     {
-        public Validator()
+        public AddPropertyValidator()
         {
             RuleFor(c => c.Title).NotEmpty()
                 .WithMessage("{PropertyName} is required.")
@@ -44,7 +44,5 @@ namespace PropertyBase.DTOs.Property.AddProperty
                 .WithMessage("{PropertyName} is required.");
         }
     }
-
-   
 }
 

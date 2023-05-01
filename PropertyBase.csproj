@@ -32,6 +32,8 @@
     <PackageReference Include="Imagekit" Version="4.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,10 +68,19 @@
     <None Remove="DTOs\Agency\" />
     <None Remove="FluentValidation.AspNetCore" />
     <None Remove="DTOs\Property\" />
-    <None Remove="DTOs\Property\AddProperty\" />
     <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <None Remove="Profiles\" />
-    <None Remove="DTOs\Property\SaveDraft\" />
+    <None Remove="MediatR" />
+    <None Remove="MediatR.Extensions.Microsoft.DependencyInjection" />
+    <None Remove="Features\" />
+    <None Remove="Features\Properties\" />
+    <None Remove="Features\Properties\AddProperty\" />
+    <None Remove="Features\Properties\UploadImages\" />
+    <None Remove="Features\Properties\SaveDraft\" />
+    <None Remove="Features\Properties\PublishProperty\" />
+    <None Remove="Features\Properties\GetLatestProperties\" />
+    <None Remove="Features\Properties\ListProperties\" />
+    <None Remove="Features\Properties\GetPropertyDetails\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -87,8 +98,15 @@
     <Folder Include="DTOs\User\" />
     <Folder Include="DTOs\Agency\" />
     <Folder Include="DTOs\Property\" />
-    <Folder Include="DTOs\Property\AddProperty\" />
     <Folder Include="Profiles\" />
-    <Folder Include="DTOs\Property\SaveDraft\" />
+    <Folder Include="Features\" />
+    <Folder Include="Features\Properties\" />
+    <Folder Include="Features\Properties\AddProperty\" />
+    <Folder Include="Features\Properties\UploadImages\" />
+    <Folder Include="Features\Properties\SaveDraft\" />
+    <Folder Include="Features\Properties\PublishProperty\" />
+    <Folder Include="Features\Properties\GetLatestProperties\" />
+    <Folder Include="Features\Properties\ListProperties\" />
+    <Folder Include="Features\Properties\GetPropertyDetails\" />
   </ItemGroup>
 </Project>

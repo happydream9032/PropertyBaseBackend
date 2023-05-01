@@ -1,12 +1,11 @@
 ﻿using System;
-using Microsoft.Extensions.Primitives;
+using MediatR;
 using PropertyBase.Entities;
 
-namespace PropertyBase.DTOs.Property.AddProperty
+namespace PropertyBase.Features.Properties.AddProperty
 {
-    public class Request 
+    public class AddPropertyRequest : IRequest<AddPropertyResponse>
     {
-
         public string Title { get; set; }
         public string? Description { get; set; }
         public string Locality { get; set; }

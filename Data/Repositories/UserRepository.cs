@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.WebUtilities;
 using PropertyBase.Contracts;
 using PropertyBase.DTOs;
 using PropertyBase.DTOs.Email;
-using PropertyBase.DTOs.Property.AddProperty;
 using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
 using PropertyBase.Exceptions;
