@@ -5,19 +5,27 @@ using MediatR;
 using PropertyBase.Contracts;
 using PropertyBase.Data.Repositories;
 using PropertyBase.Exceptions;
+using PropertyBase.DTOs.User;
 
 namespace PropertyBase.Features.Properties.GetPropertyDetails
 {
     public class GetPropertyDetailsHandler : IRequestHandler<GetPropertyDetailsRequest, GetPropertyDetailsResponse>
     {
         private readonly IPropertyRepository _propertyRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAgencyRepository _agencyRepository;
         private readonly IMapper _mapper;
 
         public GetPropertyDetailsHandler(
             IPropertyRepository propertyRepository,
-            IMapper mapper)
+            IAgencyRepository agencyRepository,
+            IUserRepository userRepository,
+            IMapper mapper
+            )
         {
             _propertyRepository = propertyRepository;
+            _agencyRepository = agencyRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 

@@ -65,7 +65,7 @@ namespace PropertyBase.Routes
                     );
             }).RequireAuthorization(AuthorizationPolicy.PropertyPolicy);
 
-            group.MapGet("/latestProperties", async (
+            group.MapPost("/latestProperties", async (
                 [FromBody] GetLatestPropertiesRequest request,
                  IMediator _mediator
                 ) =>
@@ -83,7 +83,7 @@ namespace PropertyBase.Routes
                     );
             });
 
-            group.MapGet("/list", async (
+            group.MapPost("/list", async (
                 [FromBody] ListPropertiesRequest request,
                  IMediator _mediator
                 ) =>

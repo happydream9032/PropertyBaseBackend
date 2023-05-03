@@ -27,7 +27,9 @@ namespace PropertyBase.Features.Properties.GetPropertyDetails
         public bool? Shared { get; set; }
         public List<PropertyImageVM> Images { get; set; }
         public DateTime PublishedDate { get; set; }
+        public string? OwnerId { get; set; }
         public UserProfileVM? Owner { get; set; }
+        public Guid? AgencyId { get; set; }
         public PropertyAgencyVM? Agency { get; set; }
     }
 }

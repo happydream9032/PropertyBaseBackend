@@ -81,6 +81,7 @@
     <None Remove="Features\Properties\GetLatestProperties\" />
     <None Remove="Features\Properties\ListProperties\" />
     <None Remove="Features\Properties\GetPropertyDetails\" />
+    <None Remove="Features\Properties\GetPropertiesForAgency\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -108,5 +109,6 @@
     <Folder Include="Features\Properties\GetLatestProperties\" />
     <Folder Include="Features\Properties\ListProperties\" />
     <Folder Include="Features\Properties\GetPropertyDetails\" />
+    <Folder Include="Features\Properties\GetPropertiesForAgency\" />
   </ItemGroup>
 </Project>

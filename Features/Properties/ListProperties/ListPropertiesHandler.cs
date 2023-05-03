@@ -24,6 +24,16 @@ namespace PropertyBase.Features.Properties.ListProperties
         {
             var propertiesQueryable = _propertyRepository.GetQueryable();
 
+            if(request.AgencyId.HasValue && String.IsNullOrEmpty(request.OwnerId))
+            {
+                propertiesQueryable = propertiesQueryable.Where(c => c.AgencyId == request.AgencyId);
+            }
+
+            if (!String.IsNullOrEmpty(request.OwnerId) && !request.AgencyId.HasValue)
+            {
+                propertiesQueryable = propertiesQueryable.Where(c => c.OwnerId == request.OwnerId);
+            }
+
             if (request.Furnished.HasValue)
             {
                 propertiesQueryable = propertiesQueryable.Where(c => c.Furnished.HasValue && c.Furnished.Value);
