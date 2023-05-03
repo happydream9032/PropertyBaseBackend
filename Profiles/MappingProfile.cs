@@ -14,9 +14,16 @@ namespace PropertyBase.Profiles
         public MappingProfile()
         {
             CreateMap<AddPropertyRequest, Property>().ReverseMap();
+
             CreateMap<SaveDraftRequest, Property>().ReverseMap();
+
             CreateMap<User, UserProfileVM>();
+
             CreateMap<PropertyImage, PropertyImageVM>();
+
+            CreateMap<Agency, PropertyAgencyVM>()
+                .ForMember(c => c.Owner, opt => opt.MapFrom(src => src.Owner));
+
             CreateMap<Property, PropertyOverviewVM>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images));
             CreateMap<Property, GetPropertyDetailsResponse>()

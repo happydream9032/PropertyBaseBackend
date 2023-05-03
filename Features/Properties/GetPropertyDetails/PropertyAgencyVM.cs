@@ -1,4 +1,5 @@
 ﻿using System;
+using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
 
 namespace PropertyBase.Features.Properties.GetPropertyDetails
@@ -10,8 +11,8 @@ namespace PropertyBase.Features.Properties.GetPropertyDetails
         public string? City { get; set; }
         public string? State { get; set; }
         public string? Street { get; set; }
-        public string OwnerId { get; set; }
-        public User Owner { get; set; }
+        public string? OwnerId { get; set; }
+        public UserProfileVM? Owner { get; set; }
     }
 }
 

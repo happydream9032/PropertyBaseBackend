@@ -21,6 +21,8 @@ namespace PropertyBase.Features.Properties.ListProperties
         public bool? Furnished { get; set; }
         public bool? Serviced { get; set; }
         public bool? Shared { get; set; }
+        public string? OwnerId { get; set; }
+        public Guid? AgencyId { get; set; }
     }
 }
 
