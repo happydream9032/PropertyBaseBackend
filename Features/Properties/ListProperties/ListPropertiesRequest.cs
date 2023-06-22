@@ -7,8 +7,7 @@ namespace PropertyBase.Features.Properties.ListProperties
 {
     public class ListPropertiesRequest : PagedRequest, IRequest<ListPropertiesResponse>
     {
-        public string? Locality { get; set; }
-        public string? Street { get; set; }
+        public string? SearchKeyword { get; set; }
         public PropertyType? PropertyType { get; set; }
         public double? MaximumPrice { get; set; }
         public double? MinimumPrice { get; set; }

@@ -39,10 +39,12 @@ namespace PropertyBase.Features.Properties.ListProperties
                 propertiesQueryable = propertiesQueryable.Where(c => c.Furnished.HasValue && c.Furnished.Value);
             }
 
-            if (!String.IsNullOrEmpty(request.Locality))
+            if (!String.IsNullOrEmpty(request.SearchKeyword))
             {
                 propertiesQueryable = propertiesQueryable.Where(c =>
-                !String.IsNullOrEmpty(c.Locality) && c.Locality.Contains(request.Locality));
+                (!String.IsNullOrEmpty(c.Locality) || !String.IsNullOrEmpty(c.Street))
+                && (c.Locality.ToLower().Contains(request.SearchKeyword.ToLower())||
+                    c.Street.ToLower().Contains(request.SearchKeyword.ToLower())));
             }
 
             if (request.MaximumParkingSpace.HasValue)
@@ -82,12 +84,6 @@ namespace PropertyBase.Features.Properties.ListProperties
             if (request.Shared.HasValue)
             {
                 propertiesQueryable = propertiesQueryable.Where(c => c.Shared.HasValue && c.Shared.Value);
-            }
-
-            if (!String.IsNullOrEmpty(request.Street))
-            {
-                propertiesQueryable = propertiesQueryable.Where(c =>
-                !String.IsNullOrEmpty(c.Street) && c.Street.Contains(request.Street));
             }
 
             if (request.NumberOfBathrooms.HasValue)
