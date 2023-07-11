@@ -50,15 +50,20 @@ namespace PropertyBase.Features.Properties.UploadImages
             foreach (var file in request.Files)
             {
                 var uploadedFile = await _fileStorageService.Upload(file, ImageStorageFolder.Property);
-
+                
                 propertyImages.Add(new PropertyImage
                 {
                     ImageURL = uploadedFile.url,
+                    FileId = uploadedFile.fileId,
                     Verified = true
                 });
             }
 
+            propertyImages.AddRange(property.Images);
             property.Images = propertyImages;
+
+            property.Status = PropertyStatus.Published;
+            property.PublishedDate = DateTime.UtcNow;
 
             await _propertyRepository.SaveChangesAsync();
 

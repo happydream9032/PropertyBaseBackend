@@ -3,7 +3,7 @@ using AutoMapper;
 using PropertyBase.DTOs.Property;
 using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
-using PropertyBase.Features.Properties.AddProperty;
+using PropertyBase.Features.Properties.UpdateProperty;
 using PropertyBase.Features.Properties.GetPropertyDetails;
 using PropertyBase.Features.Properties.SaveDraft;
 
@@ -13,7 +13,7 @@ namespace PropertyBase.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<AddPropertyRequest, Property>().ReverseMap();
+            CreateMap<UpdatePropertyRequest, Property>().ReverseMap();
 
             CreateMap<SaveDraftRequest, Property>().ReverseMap();
 
