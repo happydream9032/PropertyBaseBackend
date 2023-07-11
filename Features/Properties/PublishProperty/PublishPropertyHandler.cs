@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -6,7 +7,7 @@ using PropertyBase.Contracts;
 using PropertyBase.Data.Repositories;
 using PropertyBase.Entities;
 using PropertyBase.Exceptions;
-using PropertyBase.Features.Properties.AddProperty;
+using PropertyBase.Features.Properties.SaveDraft;
 using PropertyBase.Services;
 
 namespace PropertyBase.Features.Properties.PublishProperty
@@ -47,7 +48,10 @@ namespace PropertyBase.Features.Properties.PublishProperty
 
             var loggedInUserId = _loggedInUserService.UserId;
 
-            var property = await _propertyRepository.GetByIdAsync(request.PropertyId);
+            var property = await _propertyRepository.GetQueryable()
+                                 .Where(c => c.Id == request.PropertyId)
+                                 .Include(c => c.Images)
+                                 .FirstOrDefaultAsync();
 
             if (property == null)
             {
@@ -59,22 +63,9 @@ namespace PropertyBase.Features.Properties.PublishProperty
                 throw new RequestException(StatusCodes.Status400BadRequest, "You cannot publish a Property that has been published already.");
             }
 
-
-            //Validate existing property data before publishing
-            var existingPropertyData = _mapper.Map(property, new AddPropertyRequest());
-            var existingDataValidator = new AddPropertyValidator();
-            var existingDatavalidationResult = await existingDataValidator.ValidateAsync(existingPropertyData);
-
-            if (existingDatavalidationResult.Errors.Count > 0)
+            if (property.Images.Count == 0)
             {
-                var validationErrors = new List<string>();
-
-                foreach (var error in existingDatavalidationResult.Errors)
-                {
-                    validationErrors.Add(error.ErrorMessage);
-                }
-
-                throw new RequestException(StatusCodes.Status400BadRequest, validationErrors.FirstOrDefault());
+                throw new RequestException(StatusCodes.Status400BadRequest, "You cannot publish a property that doesn't have images. Upload images and try again.");
             }
 
             property.Status = PropertyStatus.Published;

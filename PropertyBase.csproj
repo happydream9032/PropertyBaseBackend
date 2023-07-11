@@ -74,7 +74,6 @@
     <None Remove="MediatR.Extensions.Microsoft.DependencyInjection" />
     <None Remove="Features\" />
     <None Remove="Features\Properties\" />
-    <None Remove="Features\Properties\AddProperty\" />
     <None Remove="Features\Properties\UploadImages\" />
     <None Remove="Features\Properties\SaveDraft\" />
     <None Remove="Features\Properties\PublishProperty\" />
@@ -82,6 +81,8 @@
     <None Remove="Features\Properties\ListProperties\" />
     <None Remove="Features\Properties\GetPropertyDetails\" />
     <None Remove="Features\Properties\GetPropertiesForAgency\" />
+    <None Remove="Features\Properties\DeleteImage\" />
+    <None Remove="Features\Properties\DeleteProperty\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -102,7 +103,6 @@
     <Folder Include="Profiles\" />
     <Folder Include="Features\" />
     <Folder Include="Features\Properties\" />
-    <Folder Include="Features\Properties\AddProperty\" />
     <Folder Include="Features\Properties\UploadImages\" />
     <Folder Include="Features\Properties\SaveDraft\" />
     <Folder Include="Features\Properties\PublishProperty\" />
@@ -110,5 +110,7 @@
     <Folder Include="Features\Properties\ListProperties\" />
     <Folder Include="Features\Properties\GetPropertyDetails\" />
     <Folder Include="Features\Properties\GetPropertiesForAgency\" />
+    <Folder Include="Features\Properties\DeleteImage\" />
+    <Folder Include="Features\Properties\DeleteProperty\" />
   </ItemGroup>
 </Project>

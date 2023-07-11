@@ -8,9 +8,9 @@ using PropertyBase.Entities;
 using PropertyBase.Exceptions;
 using PropertyBase.Services;
 
-namespace PropertyBase.Features.Properties.AddProperty
+namespace PropertyBase.Features.Properties.UpdateProperty
 {
-    public class AddPropertyHandler : IRequestHandler<AddPropertyRequest,AddPropertyResponse>
+    public class UpdatePropertyHandler : IRequestHandler<UpdatePropertyRequest,UpdatePropertyResponse>
     {
 
         private readonly IPropertyRepository _propertyRepository;
@@ -20,7 +20,7 @@ namespace PropertyBase.Features.Properties.AddProperty
         private readonly ILoggedInUserService _loggedInUserService;
         private readonly IMapper _mapper;
 
-        public AddPropertyHandler(IPropertyRepository propertyRepository,
+        public UpdatePropertyHandler(IPropertyRepository propertyRepository,
             IFileStorageService fileStorageService,
             IUserRepository userRepo,
             IAgencyRepository agencyRepo,
@@ -35,9 +35,9 @@ namespace PropertyBase.Features.Properties.AddProperty
             _mapper = mapper;
         }
 
-        public async Task<AddPropertyResponse> Handle(AddPropertyRequest request, CancellationToken cancellationToken)
+        public async Task<UpdatePropertyResponse> Handle(UpdatePropertyRequest request, CancellationToken cancellationToken)
         {
-            var validator = new AddPropertyValidator();
+            var validator = new UpdatePropertyValidator();
             var validationResult = await validator.ValidateAsync(request);
 
             if (validationResult.Errors.Count > 0)
@@ -52,40 +52,25 @@ namespace PropertyBase.Features.Properties.AddProperty
                 throw new RequestException(StatusCodes.Status400BadRequest, validationErrors.FirstOrDefault());
             }
 
-            var loggedInUserId = _loggedInUserService.UserId;
+            var property = await _propertyRepository.GetByIdAsync(request.PropertyId);
 
-            var user = await _userRepo.GetQueryable()
-                             .Where(c => c.Id == loggedInUserId)
-                             .FirstOrDefaultAsync();
-
-            if (String.IsNullOrEmpty(user?.AvatarUrl))
+            if(property == null)
             {
-                throw new RequestException(StatusCodes.Status403Forbidden, "Please upload your profile photo and try again.");
+                throw new RequestException(StatusCodes.Status400BadRequest, "Property not found.");
             }
 
-            var property = _mapper.Map<Property>(request);
-
-            property.Availability = PropertyAvailability.Available;
-            property.Status = PropertyStatus.Published;
-            property.PublishedDate = DateTime.UtcNow;
-
-            if ((await _userRepo.UserHasRole(user, RoleType.Agency)))
+            if(property.CreatedByUserId != _loggedInUserService.UserId)
             {
-                property.AgencyId = _agencyRepo.GetQueryable()
-                                         .Where(c => c.OwnerId == user.Id)
-                                         .FirstOrDefaultAsync()
-                                         .GetAwaiter()
-                                         .GetResult()?.Id;
-            }
-            else
-            {
-                property.OwnerId = user.Id;
+                throw new RequestException(StatusCodes.Status401Unauthorized, "You are not authorized to update this property. Kindly contact the owner.");
             }
 
-            await _propertyRepository.AddAsync(property);
-            return new AddPropertyResponse
+
+            var propertyRequestData = _mapper.Map<Property>(request);
+
+            await _propertyRepository.UpdateAsync(property);
+            return new UpdatePropertyResponse
             {
-                Message = "Property added successfully. The next step is to upoad the property's images.",
+                Message = "Property updated successfully.",
                 Success = true
             };
         }

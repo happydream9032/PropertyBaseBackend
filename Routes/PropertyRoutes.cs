@@ -10,7 +10,7 @@ using PropertyBase.Services;
 using PropertyBase.DTOs;
 using PropertyBase.DTOs.Property;
 using PropertyBase.DTOs.User;
-using PropertyBase.Features.Properties.AddProperty;
+using PropertyBase.Features.Properties.UpdateProperty;
 using MediatR;
 using PropertyBase.Features.Properties.UploadImages;
 using PropertyBase.Features.Properties.SaveDraft;
@@ -19,6 +19,9 @@ using PropertyBase.Features.Properties.GetLatestProperties;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PropertyBase.Features.Properties.ListProperties;
 using PropertyBase.Features.Properties.GetPropertyDetails;
+using Newtonsoft.Json;
+using PropertyBase.Features.Properties.DeleteImage;
+using PropertyBase.Features.Properties.DeleteProperty;
 
 namespace PropertyBase.Routes
 {
@@ -26,13 +29,30 @@ namespace PropertyBase.Routes
     {
        public static RouteGroupBuilder PropertyApi(this RouteGroupBuilder group)
         {
-            group.MapPost("/add", async (
-                [FromBody] AddPropertyRequest request,
+            group.MapPost("/saveDraft", async (
+               [FromBody] SaveDraftRequest request,
+                IMediator _mediator
+               ) =>
+            {
+                return Results.Ok(await _mediator.Send(request));
+            }).RequireAuthorization(AuthorizationPolicy.PropertyPolicy);
+
+            group.MapPut("/update", async (
+                [FromBody] UpdatePropertyRequest request,
                 IMediator _mediator
                 ) =>
             {
                 return Results.Ok(await _mediator.Send(request));
                 
+            }).RequireAuthorization(AuthorizationPolicy.PropertyPolicy);
+
+            group.MapDelete("/{propertyId}/delete", async (
+                Guid propertyId,
+                IMediator _mediator
+                ) =>
+            {
+                return Results.Ok(await _mediator.Send(new DeletePropertyRequest { PropertyId=propertyId}));
+
             }).RequireAuthorization(AuthorizationPolicy.PropertyPolicy);
 
             group.MapPost("/{propertyId}/uploadImages", async (
@@ -45,11 +65,10 @@ namespace PropertyBase.Routes
                     new UploadImagesRequest { PropertyId=propertyId,Files=files})
                     );
             }).RequireAuthorization(AuthorizationPolicy.PropertyPolicy);
-            
 
-            group.MapPost("/saveDraft", async (
-                [FromBody] SaveDraftRequest request,
-                 IMediator _mediator
+            group.MapPost("/deleteImage", async (
+                [FromBody] DeleteImageRequest request,
+                IMediator _mediator
                 ) =>
             {
                 return Results.Ok(await _mediator.Send(request));
@@ -89,6 +108,15 @@ namespace PropertyBase.Routes
                 ) =>
             {
                 return Results.Ok(await _mediator.Send(request));
+            });
+
+            group.MapGet("/searchLocations", async (String searchKeyWord) =>
+            {
+                var locationsApiUrl = $"{Environment.GetEnvironmentVariable("LOCACTIONS_API_BASE_URL")}?keywords={searchKeyWord}&type=localities-sub-localities-only&dataType=json";
+                var httpClient = new HttpClient();
+
+                var response = await (await httpClient.GetAsync(locationsApiUrl)).Content.ReadAsStringAsync();
+                return response;
             });
 
             return group;
