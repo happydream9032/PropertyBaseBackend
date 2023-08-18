@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using PropertyBase.Contracts;
 using PropertyBase.Data.Repositories;
 using PropertyBase.DTOs.Property;
+using PropertyBase.Entities;
 
 namespace PropertyBase.Features.Properties.GetLatestProperties
 {
@@ -26,6 +27,7 @@ namespace PropertyBase.Features.Properties.GetLatestProperties
         public async Task<GetLatestPropertiesResponse> Handle(GetLatestPropertiesRequest request, CancellationToken cancellationToken)
         {
             var latestProperties = await _propertyRepository.GetQueryable()
+                                              .Where(c=>c.Status==PropertyStatus.Published)
                                               .Include(c => c.Images)
                                               .OrderByDescending(c => c.PublishedDate)
                                               .Take(request.count)
