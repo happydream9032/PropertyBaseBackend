@@ -8,6 +8,8 @@ namespace PropertyBase.Features.Properties.SaveDraft
         public SaveDraftResponse() : base()
         {
         }
+
+        public Guid PropertyId { get; set; }
     }
 }
 

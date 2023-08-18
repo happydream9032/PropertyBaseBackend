@@ -82,12 +82,13 @@ namespace PropertyBase.Features.Properties.SaveDraft
                 property.OwnerId = user.Id;
             }
 
-            await _propertyRepository.AddAsync(property);
-
+            var newProperty = await _propertyRepository.AddAsync(property);
+            
             return new SaveDraftResponse
             {
                 Message = "Property successfully saved as draft.",
-                Success = true
+                Success = true,
+                PropertyId = newProperty.Id
             };
         }
     }
