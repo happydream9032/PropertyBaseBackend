@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PropertyBase.Contracts;
 using PropertyBase.DTOs.Property;
+using PropertyBase.Entities;
 
 namespace PropertyBase.Features.Properties.ListProperties
 {
@@ -102,6 +103,7 @@ namespace PropertyBase.Features.Properties.ListProperties
             }
 
             var propertieslist = propertiesQueryable
+                                      .Where(c=>c.Status == PropertyStatus.Published)
                                       .Skip((request.PageNumber - 1) * request.PageSize)
                                       .Take(request.PageSize)
                                       .Include(c => c.Images)
