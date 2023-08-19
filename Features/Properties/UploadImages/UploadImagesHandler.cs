@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using MediatR;
 using PropertyBase.Contracts;
 using PropertyBase.Data.Repositories;
@@ -38,7 +39,11 @@ namespace PropertyBase.Features.Properties.UploadImages
                 throw new RequestException(StatusCodes.Status400BadRequest, validationErrors.FirstOrDefault());
             }
 
-            var property = await _propertyRepository.GetByIdAsync(request.PropertyId);
+            var property = await _propertyRepository.GetQueryable()
+                                  .Include(p => p.Images)
+                                 .Where(p => p.Id == request.PropertyId)
+                                 .FirstOrDefaultAsync();
+                            
 
             if (property == null)
             {
@@ -58,8 +63,11 @@ namespace PropertyBase.Features.Properties.UploadImages
                     Verified = true
                 });
             }
-
-            propertyImages.AddRange(property.Images);
+            if (property.Images.Count > 0)
+            {
+                propertyImages.AddRange(property.Images);
+            }
+            
             property.Images = propertyImages;
 
             property.Status = PropertyStatus.Published;
