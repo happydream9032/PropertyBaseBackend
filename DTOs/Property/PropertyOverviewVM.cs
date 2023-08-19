@@ -17,6 +17,7 @@ namespace PropertyBase.DTOs.Property
         public PropertyPriceType PriceType { get; set; }
         public string Locality { get; set; }
         public string Street { get; set; }
+        public PropertyStatus Status { get; set; }
     }
 }
 

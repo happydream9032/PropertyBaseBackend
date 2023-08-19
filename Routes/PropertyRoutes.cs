@@ -22,6 +22,7 @@ using PropertyBase.Features.Properties.GetPropertyDetails;
 using Newtonsoft.Json;
 using PropertyBase.Features.Properties.DeleteImage;
 using PropertyBase.Features.Properties.DeleteProperty;
+using PropertyBase.Features.Properties.GetPropertiesForAgency;
 
 namespace PropertyBase.Routes
 {
@@ -109,6 +110,14 @@ namespace PropertyBase.Routes
             {
                 return Results.Ok(await _mediator.Send(request));
             });
+
+            group.MapPost("/propertiesForAgency", async (
+               [FromBody] GetPropertiesForAgencyRequest request,
+                IMediator _mediator
+               ) =>
+            {
+                return Results.Ok(await _mediator.Send(request));
+            }).RequireAuthorization(AuthorizationPolicy.PropertyPolicy);
 
             group.MapGet("/searchLocations", async (String searchKeyWord) =>
             {
