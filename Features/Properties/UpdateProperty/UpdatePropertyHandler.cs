@@ -67,7 +67,7 @@ namespace PropertyBase.Features.Properties.UpdateProperty
 
             var propertyRequestData = _mapper.Map<Property>(request);
 
-            await _propertyRepository.UpdateAsync(property);
+            await _propertyRepository.UpdateAsync(propertyRequestData);
             return new UpdatePropertyResponse
             {
                 Message = "Property updated successfully.",
