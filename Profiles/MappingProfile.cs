@@ -13,7 +13,8 @@ namespace PropertyBase.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<UpdatePropertyRequest, Property>().ReverseMap();
+            CreateMap<UpdatePropertyRequest, Property>()
+                .ForMember(dest=>dest.Id,opt=>opt.MapFrom(src=>src.PropertyId));
 
             CreateMap<SaveDraftRequest, Property>().ReverseMap();
 
