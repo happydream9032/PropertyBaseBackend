@@ -65,9 +65,80 @@ namespace PropertyBase.Features.Properties.UpdateProperty
             }
 
 
-            var propertyRequestData = _mapper.Map<Property>(request);
+            if (!String.IsNullOrEmpty(request.Title))
+            {
+                property.Title = request.Title;
+            }
 
-            await _propertyRepository.UpdateAsync(propertyRequestData);
+            if (!String.IsNullOrEmpty(request.Description))
+            {
+                property.Description = request.Description;
+            }
+
+            if (!String.IsNullOrEmpty(request.Locality))
+            {
+                property.Locality = request.Locality;
+            }
+
+            if (!String.IsNullOrEmpty(request.Street))
+            {
+                property.Street = request.Street;
+            }
+
+            if (request.NumberOfBathrooms.HasValue && request.NumberOfBathrooms > 0)
+            {
+                property.NumberOfBathrooms = (int)request.NumberOfBathrooms;
+            }
+
+            if (request.NumberOfBedrooms.HasValue && request.NumberOfBedrooms > 0)
+            {
+                property.NumberOfBedrooms = (int)request.NumberOfBedrooms;
+            }
+
+            if (request.NumberOfToilets.HasValue && request.NumberOfToilets > 0)
+            {
+                property.NumberOfToilets = (int)request.NumberOfToilets;
+            }
+
+            if (request.ParkingSpace.HasValue && request.ParkingSpace > 0)
+            {
+                property.ParkingSpace = request.ParkingSpace;
+            }
+
+            if (request.TotalLandArea.HasValue && request.TotalLandArea > 0)
+            {
+                property.TotalLandArea = request.TotalLandArea;
+            }
+
+            if (request.Price.HasValue && request.Price > 0)
+            {
+                property.Price = (double)request.Price;
+            }
+
+            if (request.PriceType.HasValue)
+            {
+                property.PriceType = (PropertyPriceType)request.PriceType;
+            }
+
+            if (request.Furnished.HasValue)
+            {
+                property.Furnished = request.Furnished;
+            }
+            if (request.Shared.HasValue)
+            {
+                property.Shared = request.Shared;
+            }
+            if (request.Serviced.HasValue)
+            {
+                property.Serviced = request.Serviced;
+            }
+
+            if (request.PropertyType.HasValue)
+            {
+                property.PropertyType = (PropertyType)request.PropertyType;
+            }
+           
+            await _propertyRepository.UpdateAsync(property);
             return new UpdatePropertyResponse
             {
                 Message = "Property updated successfully.",
