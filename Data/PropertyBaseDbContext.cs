@@ -57,7 +57,7 @@ namespace PropertyBase.Data
                 .HasOne(c => c.Property)
                 .WithMany(c => c.Images)
                 .HasForeignKey(c => c.PropertyId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Property>()
                 .HasOne(c => c.Agency)
