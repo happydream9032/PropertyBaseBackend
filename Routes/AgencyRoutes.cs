@@ -37,7 +37,7 @@ namespace PropertyBase.Routes
                     }
                 }
 
-                await agencyRepository.UpdateAsync(agency);
+                await agencyRepository.SaveChangesAsync();
                 return Results.Ok(agency);
             });
 
