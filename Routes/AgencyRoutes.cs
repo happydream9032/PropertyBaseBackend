@@ -38,11 +38,7 @@ namespace PropertyBase.Routes
                 }
 
                 await agencyRepository.UpdateAsync(agency);
-                return Results.Ok(new UpdateAgencyResponse
-                {
-                    Message = "Agency updated successfully",
-                    Success = true
-                });
+                return Results.Ok(agency);
             });
 
             group.MapGet("/", async (
