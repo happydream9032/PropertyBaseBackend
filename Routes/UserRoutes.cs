@@ -139,7 +139,7 @@ namespace PropertyBase.Routes
                 if (!String.IsNullOrEmpty(request.City)) user.City = request.City;
                 if (!String.IsNullOrEmpty(request.State)) user.State = request.State;
 
-                await userRepository.UpdateAsync(user);
+                await userRepository.SaveChangesAsync();
 
                 return Results.Ok(user);
 
@@ -170,7 +170,7 @@ namespace PropertyBase.Routes
                 var uploadedFile = await fileStorageService.Upload(file,ImageStorageFolder.Profile);
                 user.ImageFileId = uploadedFile.fileId;
                 user.AvatarUrl = uploadedFile.url;
-                await userRepository.UpdateAsync(user);
+                await userRepository.SaveChangesAsync();
                 return Results.Ok(uploadedFile);
 
             }).RequireAuthorization();
