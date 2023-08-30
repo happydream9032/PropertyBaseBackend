@@ -112,11 +112,26 @@ namespace PropertyBase.Routes
                 if (request.EmploymentStatus.HasValue)
                 {
                     var employmentStatus = request.EmploymentStatus == EmploymentStatus.Employed ? "Employed" :
-                         request.EmploymentStatus == EmploymentStatus.SelfEmployed ? "SelfEmployed" :
+                         request.EmploymentStatus == EmploymentStatus.SelfEmployed ? "Self employed" :
                          request.EmploymentStatus == EmploymentStatus.Student ? "Student" :
-                         "UnEmployed";
+                         "Unemployed";
                     user.EmploymentStatus = employmentStatus;
                 }
+                if (request.AllowNewPropertyNotifications.HasValue)
+                {
+                    user.AllowNewPropertyNotifications = (bool)request.AllowNewPropertyNotifications;
+                }
+
+                if (request.AllowRentDueNotifications.HasValue)
+                {
+                    user.AllowRentDueNotifications = (bool)request.AllowRentDueNotifications;
+                }
+
+                if (request.AllowRentPaymentNotifications.HasValue)
+                {
+                    user.AllowRentPaymentNotifications = (bool)request.AllowRentPaymentNotifications;
+                }
+
                 if (!String.IsNullOrEmpty(request.FirstName)) user.FirstName = request.FirstName;
                 if (!String.IsNullOrEmpty(request.LastName)) user.LastName = request.LastName;
                 if (!String.IsNullOrEmpty(request.Email)) user.Email = request.Email;
