@@ -101,22 +101,15 @@ namespace PropertyBase.Routes
                     throw new RequestException(StatusCodes.Status400BadRequest, $"User with id {userId} not found");
                 }
 
-                if (request.Gender.HasValue)
+                if (!String.IsNullOrEmpty(request.Gender))
                 {
-                    var gender = request.Gender == Gender.Female ? "Female" :
-                       request.Gender == Gender.Male ? "Male" :
-                       "Others";
-                    user.Gender = gender;
+                    user.Gender = request.Gender;
                 }
-
-                if (request.EmploymentStatus.HasValue)
+                if (!String.IsNullOrEmpty(request.EmploymentStatus))
                 {
-                    var employmentStatus = request.EmploymentStatus == EmploymentStatus.Employed ? "Employed" :
-                         request.EmploymentStatus == EmploymentStatus.SelfEmployed ? "Self employed" :
-                         request.EmploymentStatus == EmploymentStatus.Student ? "Student" :
-                         "Unemployed";
-                    user.EmploymentStatus = employmentStatus;
+                    user.EmploymentStatus = request.EmploymentStatus;
                 }
+                
                 if (request.AllowNewPropertyNotifications.HasValue)
                 {
                     user.AllowNewPropertyNotifications = (bool)request.AllowNewPropertyNotifications;

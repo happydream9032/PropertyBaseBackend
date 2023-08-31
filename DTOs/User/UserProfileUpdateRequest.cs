@@ -11,8 +11,8 @@ namespace PropertyBase.DTOs.User
         public string? PhoneNumber { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
-        public Gender? Gender { get; set; }
-        public EmploymentStatus? EmploymentStatus { get; set; }
+        public string? Gender { get; set; }
+        public string? EmploymentStatus { get; set; }
         public bool? AllowNewPropertyNotifications { get; set; }
         public bool? AllowRentDueNotifications { get; set; }
         public bool? AllowRentPaymentNotifications { get; set; }
