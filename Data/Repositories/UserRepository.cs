@@ -63,7 +63,8 @@ namespace PropertyBase.Data.Repositories
             {
                 throw new RequestException(StatusCodes.Status400BadRequest, $"no user record found for {request.Email}");
             }
-            var result = await _userManger.ResetPasswordAsync(user, request.Token, request.NewPassword);
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
+            var result = await _userManger.ResetPasswordAsync(user, decodedToken, request.NewPassword);
 
             if (!result.Succeeded)
             {
