@@ -33,7 +33,7 @@ namespace PropertyBase.Services
 
         public string GenerateHtmlForPasswordReset(User user, string resetToken)
         {
-            var frontendUrlPath = $"{Environment.GetEnvironmentVariable("FRONTEND_URL")}/passwordReset/${resetToken}";
+            var frontendUrlPath = $"{Environment.GetEnvironmentVariable("FRONTEND_URL")}/passwordReset/{resetToken}";
             return PasswordResetTemplate.GenerateTemplate(user, frontendUrlPath);
         }
 
