@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 using PropertyBase.Features.Properties.DeleteImage;
 using PropertyBase.Features.Properties.DeleteProperty;
 using PropertyBase.Features.Properties.GetPropertiesForAgency;
+using PropertyBase.Features.Properties.SendPropertyInspectionRequest;
 
 namespace PropertyBase.Routes
 {
@@ -55,6 +56,15 @@ namespace PropertyBase.Routes
                 return Results.Ok(await _mediator.Send(new DeletePropertyRequest { PropertyId=propertyId}));
 
             }).RequireAuthorization(AuthorizationPolicy.PropertyPolicy);
+
+            group.MapPost("/inspection/request", async (
+                [FromBody] InspectionCommand command,
+                IMediator _mediator
+                ) =>
+            {
+                return Results.Ok(await _mediator.Send(command));
+
+            }).RequireAuthorization();
 
             group.MapPost("/{propertyId}/uploadImages", async (
                 Guid propertyId,

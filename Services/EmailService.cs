@@ -37,6 +37,17 @@ namespace PropertyBase.Services
             return PasswordResetTemplate.GenerateTemplate(user, frontendUrlPath);
         }
 
+        public string GenerateHtmlForPropertyInspectionEmail(
+            string recipientName,
+            string requestSenderName,
+            string requestSenderEmail,
+            Guid propertyId
+            )
+        {
+            var propertyUrl = $"{Environment.GetEnvironmentVariable("FRONTEND_URL")}/property/{propertyId}";
+            return PropertyInspectionRequestEmail.GenerateTemplate(recipientName, requestSenderName, requestSenderEmail, propertyUrl);
+        }
+
         public async void sendMail(EmailRequest emailRequest)
         {
             if (!Configuration.Default.ApiKey.ContainsKey("api-key"))

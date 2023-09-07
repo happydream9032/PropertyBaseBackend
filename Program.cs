@@ -109,5 +109,10 @@ app.MapGroup("/api/properties")
     .WithTags("Property")
     .WithOpenApi();
 
+app.MapGroup("/api/home")
+    .HomeApi()
+    .WithTags("Home")
+    .WithOpenApi();
+
 app.Run();
 

@@ -11,7 +11,7 @@ namespace PropertyBase.Data
     {
         private readonly ILoggedInUserService _loggedInUserService;
 
-        public PropertyBaseDbContext(DbContextOptions<PropertyBaseDbContext> options):base(options)
+        public PropertyBaseDbContext(DbContextOptions<PropertyBaseDbContext> options) : base(options)
         {
         }
 
@@ -25,6 +25,7 @@ namespace PropertyBase.Data
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }
         public DbSet<Agency> Agencies { get; set; }
+        public DbSet<PropertyInspectionRequest> PropertyInspectionRequests {get; set;}
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -57,13 +58,16 @@ namespace PropertyBase.Data
                 .HasOne(c => c.Property)
                 .WithMany(c => c.Images)
                 .HasForeignKey(c => c.PropertyId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
 
             builder.Entity<Property>()
                 .HasOne(c => c.Agency)
                 .WithMany(c => c.Properties)
                 .HasForeignKey(c => c.AgencyId);
         }
+
+
     }
 }
 
