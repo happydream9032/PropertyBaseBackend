@@ -10,6 +10,8 @@ using PropertyBase.DTOs.User;
 using PropertyBase.Entities;
 using PropertyBase.Exceptions;
 using AutoMapper;
+using PropertyBase.DTOs.Email;
+using PropertyBase.Services;
 
 namespace PropertyBase.Routes
 {

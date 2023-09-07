@@ -83,6 +83,7 @@
     <None Remove="Features\Properties\GetPropertiesForAgency\" />
     <None Remove="Features\Properties\DeleteImage\" />
     <None Remove="Features\Properties\DeleteProperty\" />
+    <None Remove="Features\Properties\SendPropertyInspectionRequest\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
@@ -112,5 +113,6 @@
     <Folder Include="Features\Properties\GetPropertiesForAgency\" />
     <Folder Include="Features\Properties\DeleteImage\" />
     <Folder Include="Features\Properties\DeleteProperty\" />
+    <Folder Include="Features\Properties\SendPropertyInspectionRequest\" />
   </ItemGroup>
 </Project>
