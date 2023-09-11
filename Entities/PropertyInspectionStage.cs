@@ -5,7 +5,8 @@ namespace PropertyBase.Entities
     {
         Pending=1,
         InProgress=2,
-        Done=3
+        Rejected=3,
+        Done=4
     }
 }
 
