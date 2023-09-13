@@ -290,7 +290,8 @@ namespace PropertyBase.Routes
 
                     return Results.Ok(new
                     {
-                        Message = "Request cancelled successfully"
+                        Message = "Request cancelled successfully",
+                        RequestId = requestId
                     });
 
             }).RequireAuthorization(AuthorizationPolicy.TenantPolicy);
@@ -330,7 +331,8 @@ namespace PropertyBase.Routes
 
                 return Results.Ok(new
                 {
-                    Message = "Inspection completed successfully"
+                    Message = "Inspection completed successfully",
+                    RequestId = requestId
                 });
 
 
